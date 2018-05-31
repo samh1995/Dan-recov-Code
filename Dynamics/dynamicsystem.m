@@ -1,4 +1,4 @@
-function [stateDeriv, Contact, PropState,recover] = dynamicsystem(t,state,tStep,rpmControl,ImpactParams,rpmPrev,propCmds,recover)
+function [stateDeriv, Contact, PropState,recover,dandrea] = dynamicsystem(t,state,tStep,rpmControl,ImpactParams,rpmPrev,propCmds,recover,dandrea)
 %dynamicsystem.m Continuous dynamics of quadrotor, including contact
 %   Author: Fiona Chui (fiona.chui@mail.mcgill.ca)
 %   Last Updated: December 12, 2016
@@ -71,6 +71,7 @@ if abs(wallLoc - state(7)) <= 0.3
         for iBumper = 1:4
             if Contact.defl(iBumper) > 0
                 if Contact.defl(iBumper) > 0.02
+                    dandrea=1;
                    recover=0;  %%%%%%Sam added: 
                 end
                 if globalFlag.contact.isContact(iBumper) == 0

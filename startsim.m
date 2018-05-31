@@ -22,7 +22,7 @@ clear all
 % (comment section if prescribing from outside function like
 % sim_MonteCarlo.m or sim_Batch.m)
 
-VxImpact = 2.1;
+VxImpact = 3;
 inclinationImpact =20; %degrees
 yawImpact =225; %degrees
 
@@ -47,7 +47,7 @@ SimParams.recordContTime = 0;
 SimParams.useFaesslerRecovery =1;%Use Faessler recovery
 SimParams.useRecovery =1;
 SimParams.useDandrea = 0;
-SimParams.timeFinal = 5;
+SimParams.timeFinal = 10;
 SimParams.RecAttitudeSucc=0;
 tStep = 1/200;%1/200;
 
@@ -168,7 +168,7 @@ for iSim = SimParams.timeInit:tStep:SimParams.timeFinal-tStep
             disp('Dandrea recovery')
 %             Control.recoveryStage = 2;
             Control.pose.posn = [0;0;2];%   
-            Control = checkrecoverystagedand(Pose,ImpactParams, Control, ImpactInfo,iSim, timeImpact);
+            Control = checkrecoverystagedand(Pose,ImpactParams, Control, ImpactInfo,iSim, timeImpact,SimParams.useDandrea);
             Control.acc = calculatedesacceleration(Pose, Twist,Control,ImpactParams);
             Control.rpm = controllerfailrecover(tStep, Pose, Twist, Control);
             Control.type = 'dandrea';
@@ -196,9 +196,9 @@ for iSim = SimParams.timeInit:tStep:SimParams.timeFinal-tStep
     %% Record History
     if SimParams.recordContTime == 0
         
-        [stateDeriv, Contact, PropState,SimParams.useFaesslerRecovery ] = dynamicsystem(tODE(end),stateODE(end,:), ...
+        [stateDeriv, Contact, PropState,SimParams.useFaesslerRecovery,SimParams.useDandrea] = dynamicsystem(tODE(end),stateODE(end,:), ...
                                                          tStep,Control.rpm,ImpactParams, PropState.rpm, ...
-                                                         Experiment.propCmds,SimParams.useFaesslerRecovery);        
+                                                         Experiment.propCmds,SimParams.useFaesslerRecovery,SimParams.useDandrea);        
         if sum(globalFlag.contact.isContact)>0
             Contact.hasOccured = 1;
             if ImpactInfo.firstImpactOccured == 0
@@ -250,7 +250,7 @@ for iSim = SimParams.timeInit:tStep:SimParams.timeFinal-tStep
         break;
     end  
     % Navi has drifted very far away from wall:
-    if state(7) <= -10
+    if state(7) <= -20
         display('Navi has left the building');
         ImpactInfo.isStable = 1;
         break;

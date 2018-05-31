@@ -1,10 +1,10 @@
-function [Control] = checkrecoverystagedand(Pose, ImpactParams, Control, ImpactInfo,timenow,timeImapct)
+function [Control] = checkrecoverystagedand(Pose, ImpactParams, Control, ImpactInfo,timenow,timeImapct,useDandrea)
 %checkrecoverystage.m  Checks recovery stage for dand controller
 %%%%% CONDITIONS %%%%%
 
     % Stage 2 condition
  
-  safedistance=ImpactParams.wallLoc-Pose.posn(1)> 0.4 ||  timenow - timeImapct>0.2 ;
+  safedistance=ImpactParams.wallLoc-Pose.posn(1)> 0.2 ||  timenow - timeImapct>0.1 ;
 %  ImpactParams.wallLoc-Pose.posn(1)> 0.2  || timenow - timeImapct>0.2;
   
   
@@ -18,7 +18,7 @@ function [Control] = checkrecoverystagedand(Pose, ImpactParams, Control, ImpactI
 %%%%% CHECK LOGIC %%%%%
     switch Control.recoveryStage
         case 0
-            if ImpactInfo.firstImpactDetected
+            if useDandrea
                 Control.recoveryStage = 1;
             end
         case 1

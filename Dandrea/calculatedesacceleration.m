@@ -10,10 +10,12 @@ function [desiredaccel] = calculatedesacceleration(Pose, Twist, Control,ImpactPa
         
      case 2 
          
-        desrdposn=[ImpactParams.wallLoc-2;0;10]; %%desired posn
+%         desrdposn=[ImpactParams.wallLoc-1;0;10]; %%desired posn
+        desrdposn=[1;1;10]; %%desired posn
+
         desiredVinertial=[0;0;0]; %%desired vel
 
-        damping_ratio=0.5;
+        damping_ratio=0.7;
         nat_freq=1;
 
          errouter_d =[Pose.posn(1)-desrdposn(1);Pose.posn(2)-desrdposn(2);Pose.posn(3)-desrdposn(3)];
