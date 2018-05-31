@@ -22,7 +22,7 @@ clear all
 % (comment section if prescribing from outside function like
 % sim_MonteCarlo.m or sim_Batch.m)
 
-VxImpact = 3;
+VxImpact = 2.1;
 inclinationImpact =20; %degrees
 yawImpact =225; %degrees
 
@@ -46,7 +46,7 @@ SimParams.shutdown = 0;
 SimParams.recordContTime = 0;
 SimParams.useFaesslerRecovery =1;%Use Faessler recovery
 SimParams.useRecovery =1;
-SimParams.useDandrea = 1;
+SimParams.useDandrea = 0;
 SimParams.timeFinal = 5;
 SimParams.RecAttitudeSucc=0;
 tStep = 1/200;%1/200;
@@ -166,9 +166,10 @@ for iSim = SimParams.timeInit:tStep:SimParams.timeFinal-tStep
 %     elseif  SimParams.useDandrea == 1
             else
             disp('Dandrea recovery')
-            Control.recoveryStage = 2;
-            Control.pose.posn = [0;0;2];%      
-            Control.acc = calculatedesacceleration(Pose, Twist); 
+%             Control.recoveryStage = 2;
+            Control.pose.posn = [0;0;2];%   
+            Control = checkrecoverystagedand(Pose,ImpactParams, Control, ImpactInfo,iSim, timeImpact);
+            Control.acc = calculatedesacceleration(Pose, Twist,Control,ImpactParams);
             Control.rpm = controllerfailrecover(tStep, Pose, Twist, Control);
             Control.type = 'dandrea';
             end
