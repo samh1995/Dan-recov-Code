@@ -13,9 +13,9 @@ Batch = [];
 iBatch = 0;
 crash_array = [];
 
-for vImpact = 0:0.05:4
+for vImpact = 1:0.2:3
 % for vImpact = 0:0.05:4
-    for inclinationImpact = -10:1:35
+    for inclinationImpact = 10:2:35
 %  inclinationImpact =20;
         yawImpact = 225;
                 angle = (inclinationImpact - 0.0042477)/1.3836686;
@@ -23,7 +23,7 @@ for vImpact = 0:0.05:4
                 pitchImpact = angle;
            
             
-            iBatch = iBatch + 1;
+            iBatch = iBatch + 1; 
             disp(iBatch)
 
             [CrashData.ImpactIdentification,CrashData.FuzzyInfo,CrashData.Plot,CrashData.timeImpact] = startsim(vImpact, rollImpact, pitchImpact, yawImpact,iBatch);
@@ -35,7 +35,7 @@ for vImpact = 0:0.05:4
             Batch = [Batch;CrashData];
             
             crash_array(iBatch) = 0;
-            if CrashData.Plot.posns(3,end) <=0
+            if CrashData.Plot.posns(3,end) <=0 || (0>CrashData.Plot.posns(1,end) && CrashData.Plot.posns(1,end)>2) || CrashData.Plot.posns(2,end)>2 
 %                 if CrashData.Plot.times(end) - CrashData.timeImpact <= 0.9
                     crash_array(iBatch) = 1;
 %                 end
@@ -54,7 +54,7 @@ save('Batch_v(0-0.05-4)I(-10-1-35).mat')
 % roll=cell2mat(Batch.roll_atImpact)
 %%
 temp=struct2cell(Batch);
-xx=[temp{9,:}];
+xx=[temp{8,:}];
 yy=[temp{7,:}];
 %  [X,Y]=meshgrid(xx,yy);
 %  plotmatrix(X,Y)

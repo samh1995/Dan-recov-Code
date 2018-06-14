@@ -79,8 +79,8 @@ u=-K*s;
   x=linsolve(G,H);
   x(4)=0;
   for j=1:3
-    if x(j)>20
-       x(j)=20;
+    if x(j)>15
+       x(j)=15;
     end
    if x(j)<0.1
        x(j)=0.1;

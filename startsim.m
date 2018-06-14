@@ -22,7 +22,7 @@ clear all
 % (comment section if prescribing from outside function like
 % sim_MonteCarlo.m or sim_Batch.m)
 
-VxImpact = 3;
+VxImpact = 2;
 inclinationImpact =20; %degrees
 yawImpact =225; %degrees
 
@@ -47,7 +47,7 @@ SimParams.recordContTime = 0;
 SimParams.useFaesslerRecovery =1;%Use Faessler recovery
 SimParams.useRecovery =1;
 SimParams.useDandrea = 0;
-SimParams.timeFinal = 10;
+SimParams.timeFinal = 5;
 SimParams.RecAttitudeSucc=0;
 tStep = 1/200;%1/200;
 
@@ -255,6 +255,16 @@ for iSim = SimParams.timeInit:tStep:SimParams.timeFinal-tStep
         ImpactInfo.isStable = 1;
         break;
     end
+     if state(7) >= 25
+        display('Navi has left the building');
+        ImpactInfo.isStable = 1;
+        break;
+     end
+     if state(8) >= 20
+        display('Navi has left the building');
+        ImpactInfo.isStable = 1;
+        break;
+    end
     
 %     if Control.recoveryStage == 3
 %         display('Navi has recovered to hover orientation');
@@ -267,8 +277,8 @@ end
 
 %% Generate plottable arrays
 Plot = hist2plot(Hist);
-% animate(0,1,Hist,'XYZ',ImpactParams,timeImpact,[],numel(Plot.times))
-%% Toggle startsim as Script/Function
+% % animate(0,1,Hist,'XYZ',ImpactParams,timeImpact,[],numel(Plot.times))
+% %% Toggle startsim as Script/Function
 % uncomment "end" if using startsim.m as function
 subplot(2,2,1)
 plot(Hist.times,Hist.states(7,:))

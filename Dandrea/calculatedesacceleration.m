@@ -11,7 +11,7 @@ function [desiredaccel] = calculatedesacceleration(Pose, Twist, Control,ImpactPa
      case 2 
          
 %         desrdposn=[ImpactParams.wallLoc-1;0;10]; %%desired posn
-        desrdposn=[1;1;10]; %%desired posn
+        desrdposn=[0;5;10];%%desired posn
 
         desiredVinertial=[0;0;0]; %%desired vel
 
